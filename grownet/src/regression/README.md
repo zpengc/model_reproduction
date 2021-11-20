@@ -1,0 +1,1 @@
+python -u main_reg_cv.py --cuda
