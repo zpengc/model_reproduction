@@ -2,8 +2,9 @@ import scipy
 import random
 import torch
 import torch.multiprocessing as multiprocessing
-# # Changed _update_worker_pids into _set_worker_pids, due to new version of pytorch
-from torch._C import _set_worker_signal_handlers, _set_worker_pids, _remove_worker_pids, _error_if_any_worker_fails
+# Changed _update_worker_pids into _set_worker_pids, due to new version of pytorch
+from torch._C import _set_worker_signal_handlers, _set_worker_pids, \
+    _remove_worker_pids, _error_if_any_worker_fails
 from torch.utils.data.sampler import SequentialSampler, RandomSampler, BatchSampler
 import signal
 import collections
@@ -11,28 +12,17 @@ import re
 import threading
 import traceback
 import os
-from torch._six import string_classes
-import sys
+from torch._six import * #string_classes, int_classes, FileNotFoundError
 
-IS_WINDOWS = (sys.platform == "win32")  # windows系统返回win32
-
-# python wrapper for c functions
+IS_WINDOWS = sys.platform == "win32"
 if IS_WINDOWS:
     import ctypes
-    from ctypes.wintypes import DWORD, BOOL, HANDLE  # windows data types
-# DWORD: typedef unsigned long DWORD
-# BOOL: typedef int BOOL
-# HANDLE: typedef PVOID HANDLE
-# PVOID: typedef void *PVOID
+    from ctypes.wintypes import DWORD, BOOL, HANDLE
 
-
-# sys.version_info is a reliable way to determine Python version.
-# https://docs.python.org/3/library/sys.html#sys.version_info
-if sys.version_info.major == 2:  # python2
+if sys.version_info[0] == 2:
     import Queue as queue
-else:  # python3
+else:
     import queue
-
 
 
 class ExceptionWrapper(object):
@@ -401,8 +391,8 @@ class _DataLoaderIter(object):
 
 class DataLoader(object):
     r"""
-    Data loader. Combines a dataset and a sampler, and provides an iterable over
-    the given dataset.
+    Data loader. Combines a dataset and a sampler, and provides
+    single- or multi-process iterators over the dataset.
     Arguments:
         dataset (Dataset): dataset from which to load the data.
         batch_size (int, optional): how many samples per batch to load
@@ -471,7 +461,7 @@ class DataLoader(object):
             raise ValueError('sampler option is mutually exclusive with '
                              'shuffle')
 
-        if num_workers < 0:
+        if self.num_workers < 0:
             raise ValueError('num_workers option cannot be negative; '
                              'use num_workers=0 to disable multiprocessing.')
 

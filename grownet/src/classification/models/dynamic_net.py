@@ -1,24 +1,16 @@
-from enum import Enum
 import torch
 import torch.nn as nn
-
-
-class ForwardType(Enum):
-    SIMPLE = 0
-    STACKED = 1
-    CASCADE = 2
-    GRADIENT = 3
 
 
 class DynamicNet(object):
     """
     ensemble network
     """
-    def __init__(self, c0, lr):  # c0表示标签值均值
+    def __init__(self, c0, boost_rate):  # c0表示标签值均值
         self.models = []
         self.c0 = c0
-        self.lr = lr
-        self.boost_rate = nn.Parameter(torch.tensor(lr, requires_grad=True))
+        self.lr = boost_rate  # initial 1
+        self.boost_rate = nn.Parameter(torch.tensor(boost_rate, requires_grad=True))
 
     def add(self, model):
         self.models.append(model)

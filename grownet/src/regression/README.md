@@ -1,1 +1,2 @@
-python -u main_reg_cv.py --cuda
+运行方式：
+- python main_reg_cv.py

@@ -59,9 +59,9 @@ class MLP_2HL(nn.Module):
 
     @classmethod
     def get_model(cls, stage, opt):
-        if stage == 0:  # 第一个模型, (2048, 90)
+        if stage == 0:  # 第一个模型, (2048, 28)
             dim_in = opt.feat_d
-        else:  # 后续模型, (2048, 122)
+        else:  # 后续模型, (2048, 44) 28+16==44
             dim_in = opt.feat_d + opt.hidden_d
         model = MLP_2HL(dim_in, opt.hidden_d, opt.hidden_d, opt.sparse)
         return model
