@@ -86,26 +86,27 @@ def compute_weight(centrality_dict, triple_line_graph, triple1, triple2, directe
 
 def get_walks(triple_line_graph):
     walks = []
-    nodes = triple_line_graph.nodes
-    for start_node in nodes:
-        walk = [start_node]
-        current = start_node
-        while len(walk) < settings["walk_length"]:
-            neighbors = list(triple_line_graph.neighbors(current))
-            if len(neighbors) == 0:
-                break
-            current = random.choice(neighbors)
-            walk.append(str(current))
-        walks.append(walk)
+    # nodes = triple_line_graph.nodes
+    # for start_node in nodes:
+    #     walk = [start_node]
+    #     current = start_node
+    #     while len(walk) < settings["walk_length"]:
+    #         neighbors = list(triple_line_graph.neighbors(current))
+    #         if len(neighbors) == 0:
+    #             break
+    #         current = random.choice(neighbors)
+    #         walk.append(str(current))
+    #     walks.append(walk)
 
     return walks
 
 
 def learn_embeddings(walks):
-    model = Word2Vec(vector_size=settings["dimension"], window=settings["window_size"], sg=1, min_count=0, hs=0, negative=settings["num_negative_samples"], compute_loss=True, workers=cpu_count())
-    model.build_vocab(walks)
-    model.train(walks, total_examples=model.corpus_count, epochs=settings["iteration"])
-    word_vec = model.wv
+    word_vec = None
+    # model = Word2Vec(vector_size=settings["dimension"], window=settings["window_size"], sg=1, min_count=0, hs=0, negative=settings["num_negative_samples"], compute_loss=True, workers=cpu_count())
+    # model.build_vocab(walks)
+    # model.train(walks, total_examples=model.corpus_count, epochs=settings["iteration"])
+    # word_vec = model.wv
     return word_vec
 
 
